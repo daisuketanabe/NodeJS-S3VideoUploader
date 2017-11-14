@@ -10,9 +10,9 @@ const config = require('./config.json');
 
 const app = express();
 
-const BucketName = conifg.myBucketName;
+console.log(config.mySecretAccessKey);
 
-AWS.config.update({ accessKeyId: config.myAccessKey, secretAccessKey: config.mySecretAccessKey });
+AWS.config.update({ accessKeyId: config.myAccessKeyId, secretAccessKey: config.mySecretAccessKey});
 
 console.log("Web Server Loading...");
 
@@ -21,26 +21,23 @@ app.post('/upload',function(preq,pres){
     form.parse(preq, function (err, fields, files) {
         const oldpath = files.filetoupload.path;
         const original = files.filetoupload.name;
-        //console.log(oldpath);
-        //console.log(files.filetoupload.name);
-
-        const filename = cofig.myPath + original;
-        console.log(filename);
-        console.log(files);
+        const filename = config.myPath + original;
+        //console.log(filename);
+        //console.log(files);
         if (files.filetoupload.type.match(/video\/*/)){
             fs.readFile(oldpath, function (err, data) {
                 if (err) throw err;
                 
                 const base64data = new Buffer(data, 'binary');
                 const s3 = new AWS.S3();
-    
+
                 s3.putObject({
-                    Bucket: BucketName,
+                    Bucket: config.myBucketName,
                     Key: filename,
                     Body: base64data,
                     ACL: 'public-read'
                 },function (resp) {
-                    //console.log(arguments);
+                    console.log(arguments);
                     console.log('Successfully uploaded package.');
                 });
                                 

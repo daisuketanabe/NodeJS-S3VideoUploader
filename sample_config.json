@@ -1,0 +1,5 @@
+"myAccessKeyId" : "Key",
+"mySecretAccessKey" : "Secret",
+"myBucketName" : "Bukect",
+"myBucketRegion" : "eu-west-1",
+"myPath" : "Video/"
