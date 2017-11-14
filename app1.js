@@ -6,11 +6,13 @@ const formidable = require('formidable');
 const AWS = require('aws-sdk');
 const multer = require('multer');
 
+const config = require('./config.json');
+
 const app = express();
 
-const albumBucketName = 'Bucket';
+const BucketName = conifg.myBucketName;
 
-AWS.config.update({ accessKeyId: 'KeyID', secretAccessKey: 'Key' });
+AWS.config.update({ accessKeyId: config.myAccessKey, secretAccessKey: config.mySecretAccessKey });
 
 console.log("Web Server Loading...");
 
@@ -22,7 +24,7 @@ app.post('/upload',function(preq,pres){
         //console.log(oldpath);
         //console.log(files.filetoupload.name);
 
-        const filename = original;
+        const filename = cofig.myPath + original;
         console.log(filename);
         console.log(files);
         if (files.filetoupload.type.match(/video\/*/)){
@@ -33,7 +35,7 @@ app.post('/upload',function(preq,pres){
                 const s3 = new AWS.S3();
     
                 s3.putObject({
-                    Bucket: albumBucketName,
+                    Bucket: BucketName,
                     Key: filename,
                     Body: base64data,
                     ACL: 'public-read'
